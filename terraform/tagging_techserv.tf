@@ -31,3 +31,14 @@ data "aws_iam_policy_document" "tag_itp_technical_service" {
     }
   }
 }
+
+resource "aws_organizations_policy" "tag_itp_technical_service" {
+  name        = "TagITPTechnicalService"
+  description = "Allow certain EC2 instance types only."
+  content     = data.aws_iam_policy_document.tag_itp_technical_service.json
+}
+
+resource "aws_organizations_policy_attachment" "tag_itp_technical_service_scp" {
+  policy_id = aws_organizations_policy.tag_itp_technical_service.id
+  target_id = "ou-gggb-0k7see5q"
+}
