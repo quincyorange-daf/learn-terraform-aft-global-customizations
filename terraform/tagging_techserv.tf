@@ -1,39 +1,41 @@
-data "aws_organizations_policy" "tag_itp_technical_service" {
-  content = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Sid": "TagITPTechnicalService",
-        "Effect": "Allow",
-        "Action": "ec2:CreateInstances",
-        "Resource": "arn:aws:ec2:*:*:instance/*",
-        "Condition": {
-          "StringEquals": {
-            "aws:ResourceTag/ITPTechnicalService": [
-              "ISS",
-              "Storage and Virtualization",
-              "Identity Infrastructure",
-              "Software A",
-              "Software B",
-              "Service Centre",
-              "Hybrid Cloud",
-              "Analytics",
-              "Workplace Technology",
-              "Server Administration",
-              "Application Hosting Linux",
-              "Application Hosting Windows"
-            ]
-          }
-        }
-      }
+data "aws_organizations_policy_document" "tag_itp_technical_service" {
+  statement {
+    sid    = "TagITPTechnicalService"
+    effect = "Allow"
+
+    actions = [
+      "ec2:CreateInstances"
     ]
-  })
+
+    resources = [
+      "arn:aws:ec2:*:*:instance/*"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/ITPTechnicalService"
+      values   = [
+        "ISS",
+        "Storage and Virtualization",
+        "Identity Infrastructure",
+        "Software A",
+        "Software B",
+        "Service Centre",
+        "Hybrid Cloud",
+        "Analytics",
+        "Workplace Technology",
+        "Server Administration",
+        "Application Hosting Linux",
+        "Application Hosting Windows"
+      ]
+    }
+  }
 }
 
 resource "aws_organizations_policy" "tag_itp_technical_service" {
   name        = "TagITPTechnicalService"
-  description = "Allow certain EC2 instance types only."
-  content     = data.aws_organizations_policy.tag_itp_technical_service.content
+  description = "Allow EC2 instance creation only when the Technical Service tag is present."
+  content     = data.aws_organizations_policy_document.tag_itp_technical_service.json
   type        = "SERVICE_CONTROL_POLICY"
 }
 
