@@ -1,7 +1,7 @@
 
-data "aws_iam_policy_document" "Tag_ITPTechnicalService" {
+data "aws_iam_policy_document" "TagITPTechnicalService" {
   statement {
-    sid    = "Tag_ITPTechnicalService"
+    sid    = "TagITPTechnicalService"
     effect = "Allow"
 
     actions = [
@@ -33,13 +33,13 @@ data "aws_iam_policy_document" "Tag_ITPTechnicalService" {
   }
 }
 
-resource "aws_organizations_policy" "Tag_ITPTechnicalService" {
-  name        = "Tag-ITPTechnicalService"
+resource "aws_organizations_policy" "TagITPTechnicalService" {
+  name        = "TagITPTechnicalService"
   description = "Allow certain EC2 instance types only."
-  content     = data.aws_iam_policy_document.Tag_ITPTechnicalService.json
+  content     = data.aws_iam_policy_document.TagITPTechnicalService.json
 }
 
-resource "aws_organizations_policy_attachment" "Tag_ITPTechnicalService_SCP" {
-  policy_id = aws_organizations_policy.Tag_ITPTechnicalService.id
+resource "aws_organizations_policy_attachment" "TagITPTechnicalServiceSCP" {
+  policy_id = aws_organizations_policy.TagITPTechnicalService.id
   target_id = "ou-gggb-0k7see5q"
 }
